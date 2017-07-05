@@ -14,6 +14,9 @@ NoViableAltException::NoViableAltException(Parser *recognizer)
                          recognizer->getCurrentToken(), nullptr, recognizer->getContext()) {
 }
 
+NoViableAltException::~NoViableAltException() {
+}
+
 NoViableAltException::NoViableAltException(Parser *recognizer, TokenStream *input,Token *startToken,
   Token *offendingToken, atn::ATNConfigSet *deadEndConfigs, ParserRuleContext *ctx)
   : RecognitionException("No viable alternative", recognizer, input, ctx, offendingToken), _deadEndConfigs(deadEndConfigs), _startToken(startToken) {

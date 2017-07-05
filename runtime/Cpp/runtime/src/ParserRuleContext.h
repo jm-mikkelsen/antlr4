@@ -66,8 +66,11 @@ namespace antlr4 {
     std::exception_ptr exception;
 
     ParserRuleContext();
+    ParserRuleContext(ParserRuleContext const&) = delete;
     ParserRuleContext(ParserRuleContext *parent, size_t invokingStateNumber);
-    virtual ~ParserRuleContext() {}
+    virtual ~ParserRuleContext();
+
+    ParserRuleContext& operator=(ParserRuleContext const&) = delete;
 
     /** COPY a ctx (I'm deliberately not using copy constructor) to avoid
      *  confusion with creating node with parent. Does not copy children

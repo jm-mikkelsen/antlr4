@@ -28,22 +28,22 @@ ATNConfig::ATNConfig(Ref<ATNConfig> const& c) : ATNConfig(c, c->state, c->contex
 ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state_) : ATNConfig(c, state_, c->context, c->semanticContext) {
 }
 
-ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state, Ref<SemanticContext> const& semanticContext)
-  : ATNConfig(c, state, c->context, semanticContext) {
+ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state_, Ref<SemanticContext> const& semanticContext_)
+  : ATNConfig(c, state_, c->context, semanticContext_) {
 }
 
-ATNConfig::ATNConfig(Ref<ATNConfig> const& c, Ref<SemanticContext> const& semanticContext)
-  : ATNConfig(c, c->state, c->context, semanticContext) {
+ATNConfig::ATNConfig(Ref<ATNConfig> const& c, Ref<SemanticContext> const& semanticContext_)
+  : ATNConfig(c, c->state, c->context, semanticContext_) {
 }
 
-ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state, Ref<PredictionContext> const& context)
-  : ATNConfig(c, state, context, c->semanticContext) {
+ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state_, Ref<PredictionContext> const& context_)
+  : ATNConfig(c, state_, context_, c->semanticContext) {
 }
 
-ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state, Ref<PredictionContext> const& context,
-                     Ref<SemanticContext> const& semanticContext)
-  : state(state), alt(c->alt), context(context), reachesIntoOuterContext(c->reachesIntoOuterContext),
-    semanticContext(semanticContext) {
+ATNConfig::ATNConfig(Ref<ATNConfig> const& c, ATNState *state_, Ref<PredictionContext> const& context_,
+                     Ref<SemanticContext> const& semanticContext_)
+  : state(state_), alt(c->alt), context(context_), reachesIntoOuterContext(c->reachesIntoOuterContext),
+    semanticContext(semanticContext_) {
 }
 
 ATNConfig::~ATNConfig() {

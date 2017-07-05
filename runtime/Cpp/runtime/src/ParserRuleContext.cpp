@@ -28,6 +28,9 @@ ParserRuleContext::ParserRuleContext(ParserRuleContext *parent, size_t invokingS
 : RuleContext(parent, invokingStateNumber), start(nullptr), stop(nullptr) {
 }
 
+ParserRuleContext::~ParserRuleContext() {
+}
+
 void ParserRuleContext::copyFrom(ParserRuleContext *ctx) {
   // from RuleContext
   this->parent = ctx->parent;

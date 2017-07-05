@@ -21,7 +21,10 @@ namespace antlr4 {
     class TraceListener : public tree::ParseTreeListener {
     public:
       TraceListener(Parser *outerInstance);
+      TraceListener(TraceListener const&) = delete;
       virtual ~TraceListener();
+
+      TraceListener& operator=(TraceListener const&) = delete;
 
       virtual void enterEveryRule(ParserRuleContext *ctx) override;
       virtual void visitTerminal(tree::TerminalNode *node) override;
@@ -45,7 +48,10 @@ namespace antlr4 {
     };
 
     Parser(TokenStream *input);
+    Parser(Parser const&) = delete;
     virtual ~Parser();
+
+    Parser& operator=(Parser const&) = delete;
 
     /// reset the parser's state
     virtual void reset();

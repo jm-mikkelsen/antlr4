@@ -21,7 +21,7 @@ namespace tree {
   public:
     ParseTree();
     ParseTree(ParseTree const&) = delete;
-    virtual ~ParseTree() {}
+    virtual ~ParseTree();
 
     ParseTree& operator=(ParseTree const&) = delete;
 

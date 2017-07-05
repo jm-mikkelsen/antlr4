@@ -29,8 +29,7 @@ TokenStreamRewriter::RewriteOperation::RewriteOperation(TokenStreamRewriter *out
   this->text = text_;
 }
 
-TokenStreamRewriter::RewriteOperation::~RewriteOperation()
-{
+TokenStreamRewriter::RewriteOperation::~RewriteOperation() {
 }
 
 size_t TokenStreamRewriter::RewriteOperation::execute(std::string * /*buf*/) {
@@ -53,6 +52,9 @@ TokenStreamRewriter::InsertBeforeOp::InsertBeforeOp(TokenStreamRewriter *outerIn
 : RewriteOperation(outerInstance_, index_, text_), outerInstance(outerInstance_) {
 }
 
+TokenStreamRewriter::InsertBeforeOp::~InsertBeforeOp() {
+}
+
 size_t TokenStreamRewriter::InsertBeforeOp::execute(std::string *buf) {
   buf->append(text);
   if (outerInstance->tokens->get(index)->getType() != Token::EOF) {
@@ -66,6 +68,9 @@ TokenStreamRewriter::ReplaceOp::ReplaceOp(TokenStreamRewriter *outerInstance_, s
 
   InitializeInstanceFields();
   lastIndex = to;
+}
+
+TokenStreamRewriter::ReplaceOp::~ReplaceOp() {
 }
 
 size_t TokenStreamRewriter::ReplaceOp::execute(std::string *buf) {

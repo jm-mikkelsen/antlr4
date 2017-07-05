@@ -10,6 +10,9 @@ using namespace antlr4::atn;
 BlockEndState::BlockEndState() : startState(nullptr) {
 }
 
+BlockEndState::~BlockEndState() {
+}
+
 size_t BlockEndState::getStateType() {
   return BLOCK_END;
 }

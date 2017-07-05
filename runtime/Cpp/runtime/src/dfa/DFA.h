@@ -31,6 +31,8 @@ namespace dfa {
     DFA(DFA &&other);
     virtual ~DFA();
 
+    DFA& operator=(const DFA &other) = delete;
+
     /**
      * Gets whether this DFA is a precedence DFA. Precedence DFAs use a special
      * start state {@link #s0} which is not stored in {@link #states}. The

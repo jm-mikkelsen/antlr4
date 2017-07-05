@@ -14,7 +14,10 @@ namespace atn {
 
     ATNSerializer(ATN *atn);
     ATNSerializer(ATN *atn, const std::vector<std::string> &tokenNames);
+    ATNSerializer(ATNSerializer const&) = default;
     virtual ~ATNSerializer();
+
+    ATNSerializer& operator=(ATNSerializer const&) = default;
 
     /// <summary>
     /// Serialize state descriptors, edge descriptors, and decision->state map

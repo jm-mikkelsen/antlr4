@@ -10,6 +10,9 @@ using namespace antlr4::tree;
 ParseTree::ParseTree() : parent(nullptr) {
 }
 
+ParseTree::~ParseTree() {
+}
+
 bool ParseTree::operator == (const ParseTree &other) const {
   return &other == this;
 }

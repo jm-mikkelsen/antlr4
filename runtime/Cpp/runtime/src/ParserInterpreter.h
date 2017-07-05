@@ -34,7 +34,10 @@ namespace antlr4 {
       const std::vector<std::string>& ruleNames, const atn::ATN &atn, TokenStream *input);
     ParserInterpreter(const std::string &grammarFileName, const dfa::Vocabulary &vocabulary,
                       const std::vector<std::string> &ruleNames, const atn::ATN &atn, TokenStream *input);
+    ParserInterpreter(ParserInterpreter const&) = delete;
     ~ParserInterpreter();
+
+    ParserInterpreter& operator=(ParserInterpreter const&) = delete;
 
     virtual void reset() override;
 

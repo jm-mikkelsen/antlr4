@@ -29,6 +29,9 @@ Lexer::Lexer(CharStream *input) : Recognizer(), _input(input) {
   InitializeInstanceFields();
 }
 
+Lexer::~Lexer() {
+}
+
 void Lexer::reset() {
   // wack Lexer state variables
   _input->seek(0); // rewind the input

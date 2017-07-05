@@ -17,9 +17,13 @@ namespace antlr4 {
   /// in the various paths when the error. Reported by reportNoViableAlternative()
   class ANTLR4CPP_PUBLIC NoViableAltException : public RecognitionException {
   public:
-    NoViableAltException(Parser *recognizer); // LL(1) error
+    explicit NoViableAltException(Parser *recognizer); // LL(1) error
     NoViableAltException(Parser *recognizer, TokenStream *input,Token *startToken,
       Token *offendingToken, atn::ATNConfigSet *deadEndConfigs, ParserRuleContext *ctx);
+    NoViableAltException(NoViableAltException const&) = default;
+    virtual ~NoViableAltException();
+
+    NoViableAltException& operator=(NoViableAltException const&) = default;
 
     virtual Token* getStartToken() const;
     virtual atn::ATNConfigSet* getDeadEndConfigs() const;

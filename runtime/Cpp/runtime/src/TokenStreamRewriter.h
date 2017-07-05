@@ -89,8 +89,11 @@ namespace antlr4 {
     static const size_t PROGRAM_INIT_SIZE = 100;
     static const size_t MIN_TOKEN_INDEX = 0;
 
+    TokenStreamRewriter(TokenStreamRewriter const&) = delete;
     TokenStreamRewriter(TokenStream *tokens);
     virtual ~TokenStreamRewriter();
+
+    TokenStreamRewriter& operator=(TokenStreamRewriter const&) = delete;
 
     TokenStream *getTokenStream();
 
@@ -164,7 +167,10 @@ namespace antlr4 {
 
       RewriteOperation(TokenStreamRewriter *outerInstance, size_t index);
       RewriteOperation(TokenStreamRewriter *outerInstance, size_t index, const std::string& text);
+      RewriteOperation(RewriteOperation const&) = default;
       virtual ~RewriteOperation();
+
+      RewriteOperation& operator=(RewriteOperation const&) = default;
 
       /// Execute the rewrite operation by possibly adding to the buffer.
       /// Return the index of the next token to operate on.
@@ -183,6 +189,10 @@ namespace antlr4 {
 
     public:
       InsertBeforeOp(TokenStreamRewriter *outerInstance, size_t index, const std::string& text);
+      InsertBeforeOp(InsertBeforeOp const&) = default;
+      ~InsertBeforeOp();
+
+      InsertBeforeOp& operator=(InsertBeforeOp const&) = default;
 
       virtual size_t execute(std::string *buf) override;
     };
@@ -195,6 +205,11 @@ namespace antlr4 {
       size_t lastIndex;
 
       ReplaceOp(TokenStreamRewriter *outerInstance, size_t from, size_t to, const std::string& text);
+      ReplaceOp(ReplaceOp const&) = default;
+      ~ReplaceOp();
+
+      ReplaceOp& operator=(ReplaceOp const&) = default;
+
       virtual size_t execute(std::string *buf) override;
       virtual std::string toString() override;
 

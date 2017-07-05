@@ -29,6 +29,9 @@ namespace antlr4 {
     ANTLRInputStream(const char data_[], size_t numberOfActualCharsInArray);
     ANTLRInputStream(std::istream &stream);
 
+    ANTLRInputStream(ANTLRInputStream const&) = delete;
+    ANTLRInputStream& operator=(ANTLRInputStream const&) = delete;
+
     virtual void load(const std::string &input);
     virtual void load(std::istream &stream);
 

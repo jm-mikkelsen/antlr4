@@ -16,6 +16,10 @@ namespace atn {
     BlockStartState *startState = nullptr;
 
     BlockEndState();
+    BlockEndState(BlockEndState const&) = default;
+    virtual ~BlockEndState();
+
+    BlockEndState& operator=(BlockEndState const&) = default;
 
     virtual size_t getStateType() override;
   };

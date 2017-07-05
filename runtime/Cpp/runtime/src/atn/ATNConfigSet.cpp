@@ -15,7 +15,7 @@
 using namespace antlr4::atn;
 using namespace antlrcpp;
 
-ATNConfigSet::ATNConfigSet(bool fullCtx) : fullCtx(fullCtx) {
+ATNConfigSet::ATNConfigSet(bool fullCtx_) : fullCtx(fullCtx_) {
   InitializeInstanceFields();
 }
 
@@ -99,7 +99,7 @@ std::vector<ATNState*> ATNConfigSet::getStates() {
 
 BitSet ATNConfigSet::getAlts() {
   BitSet alts;
-  for (ATNConfig config : configs) {
+  for (ATNConfig const& config : configs) {
     alts.set(config.alt);
   }
   return alts;

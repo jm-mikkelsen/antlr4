@@ -17,7 +17,10 @@ namespace atn {
   protected:
     class SimState {
     public:
+      SimState(SimState const&) = default;
       virtual ~SimState();
+
+      SimState& operator=(SimState const&) = default;
 
     protected:
       size_t index;
