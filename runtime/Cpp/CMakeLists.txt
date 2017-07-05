@@ -89,7 +89,7 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "GNU")
     if (NOT (GCC_VERSION VERSION_GREATER 5.0 OR GCC_VERSION VERSION_EQUAL 5.0))
         message(FATAL_ERROR "${PROJECT_NAME} requires g++ 5.0 or greater.")
     endif ()
-elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND APPLE)
+elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND (APPLE OR CMAKE_CXX_PLATFORM_ID MATCHES "FreeBSD"))
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 elseif ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang" AND CMAKE_SYSTEM_NAME MATCHES "Linux")
     execute_process(
