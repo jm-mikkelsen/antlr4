@@ -58,11 +58,14 @@ namespace xpath {
     static const std::string WILDCARD; // word not operator/separator
     static const std::string NOT; // word for invert operator
 
+    XPath(XPath const&) = delete;
     XPath(Parser *parser, const std::string &path);
-    virtual ~XPath() {}
+    virtual ~XPath();
+
+    XPath& operator=(XPath const&) = delete;
 
     // TO_DO: check for invalid token/rule names, bad syntax
-    virtual std::vector<XPathElement> split(const std::string &path);
+    virtual std::vector<std::unique_ptr<XPathElement>> split(const std::string &path);
 
     /// Return a list of all nodes starting at {@code t} as root that satisfy the
     /// path. The root {@code /} is relative to the node passed to
@@ -71,13 +74,13 @@ namespace xpath {
 
   protected:
     std::string _path;
-    std::vector<XPathElement> _elements;
+    std::vector<std::unique_ptr<XPathElement>> _elements;
     Parser *_parser;
 
     /// Convert word like {@code *} or {@code ID} or {@code expr} to a path
     /// element. {@code anywhere} is {@code true} if {@code //} precedes the
     /// word.
-    virtual XPathElement getXPathElement(Token *wordToken, bool anywhere);
+    virtual std::unique_ptr<XPathElement> getXPathElement(Token *wordToken, bool anywhere);
   };
 
 } // namespace xpath

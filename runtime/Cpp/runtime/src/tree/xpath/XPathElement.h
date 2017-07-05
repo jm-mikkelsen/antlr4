@@ -18,14 +18,14 @@ namespace xpath {
     /// Construct element like {@code /ID} or {@code ID} or {@code /*} etc...
     ///  op is null if just node
     XPathElement(const std::string &nodeName);
-    XPathElement(XPathElement const&) = default;
+    XPathElement(XPathElement const&) = delete;
     virtual ~XPathElement();
 
-    XPathElement& operator=(XPathElement const&) = default;
+    XPathElement& operator=(XPathElement const&) = delete;
 
     /// Given tree rooted at {@code t} return all nodes matched by this path
     /// element.
-    virtual std::vector<ParseTree *> evaluate(ParseTree *t);
+    virtual std::vector<ParseTree *> evaluate(ParseTree *t) = 0;
     virtual std::string toString() const;
 
     void setInvert(bool value);

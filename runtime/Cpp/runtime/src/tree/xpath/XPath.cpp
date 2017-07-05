@@ -28,7 +28,10 @@ XPath::XPath(Parser *parser, const std::string &path) {
   _elements = split(path);
 }
 
-std::vector<XPathElement> XPath::split(const std::string &path) {
+XPath::~XPath() {
+}
+
+std::vector<std::unique_ptr<XPathElement>> XPath::split(const std::string &path) {
   ANTLRFileStream in(path);
   XPathLexer lexer(&in);
   lexer.removeErrorListeners();
@@ -44,7 +47,7 @@ std::vector<XPathElement> XPath::split(const std::string &path) {
   }
 
   std::vector<Token *> tokens = tokenStream.getTokens();
-  std::vector<XPathElement> elements;
+  std::vector<std::unique_ptr<XPathElement>> elements;
   size_t n = tokens.size();
   size_t i = 0;
   bool done = false;
@@ -62,9 +65,9 @@ std::vector<XPathElement> XPath::split(const std::string &path) {
           i++;
           next = tokens[i];
         }
-        XPathElement pathElement = getXPathElement(next, anywhere);
-        pathElement.setInvert(invert);
-        elements.push_back(pathElement);
+        auto pathElement = getXPathElement(next, anywhere);
+        pathElement->setInvert(invert);
+        elements.emplace_back(std::move(pathElement));
         i++;
         break;
 
@@ -72,7 +75,7 @@ std::vector<XPathElement> XPath::split(const std::string &path) {
       case XPathLexer::TOKEN_REF:
       case XPathLexer::RULE_REF:
       case XPathLexer::WILDCARD:
-        elements.push_back(getXPathElement(el, false));
+        elements.emplace_back(getXPathElement(el, false));
         i++;
         break;
 
@@ -88,7 +91,7 @@ std::vector<XPathElement> XPath::split(const std::string &path) {
   return elements;
 }
 
-XPathElement XPath::getXPathElement(Token *wordToken, bool anywhere) {
+std::unique_ptr<XPathElement> XPath::getXPathElement(Token *wordToken, bool anywhere) {
   if (wordToken->getType() == Token::EOF) {
     throw IllegalArgumentException("Missing path element at end of path");
   }
@@ -98,8 +101,9 @@ XPathElement XPath::getXPathElement(Token *wordToken, bool anywhere) {
   switch (wordToken->getType()) {
     case XPathLexer::WILDCARD :
       if (anywhere)
-        return XPathWildcardAnywhereElement();
-      return XPathWildcardElement();
+        return std::unique_ptr<XPathElement>(
+		new XPathWildcardAnywhereElement);
+      return std::unique_ptr<XPathElement>(new XPathWildcardElement());
 
     case XPathLexer::TOKEN_REF:
     case XPathLexer::STRING :
@@ -107,16 +111,20 @@ XPathElement XPath::getXPathElement(Token *wordToken, bool anywhere) {
         throw IllegalArgumentException(word + " at index " + std::to_string(wordToken->getStartIndex()) + " isn't a valid token name");
       }
       if (anywhere)
-        return XPathTokenAnywhereElement(word, (int)ttype);
-      return XPathTokenElement(word, (int)ttype);
+	return std::unique_ptr<XPathElement>(
+		new XPathTokenAnywhereElement(word, static_cast<int>(ttype)));
+      return std::unique_ptr<XPathElement>(
+	      new XPathTokenElement(word, static_cast<int>(ttype)));
 
     default :
       if (ruleIndex == -1) {
         throw IllegalArgumentException(word + " at index " + std::to_string(wordToken->getStartIndex()) + " isn't a valid rule name");
       }
       if (anywhere)
-        return XPathRuleAnywhereElement(word, (int)ruleIndex);
-      return XPathRuleElement(word, (int)ruleIndex);
+        return std::unique_ptr<XPathElement>(
+		new XPathRuleAnywhereElement(word, static_cast<int>(ruleIndex)));
+      return std::unique_ptr<XPathElement>(
+	      new XPathRuleElement(word, static_cast<int>(ruleIndex)));
   }
 }
 
@@ -135,7 +143,7 @@ std::vector<ParseTree *> XPath::evaluate(ParseTree *t) {
         // only try to match next element if it has children
         // e.g., //func/*/stat might have a token node for which
         // we can't go looking for stat nodes.
-        auto matching = _elements[i].evaluate(node);
+        auto matching = _elements[i]->evaluate(node);
         next.insert(next.end(), matching.begin(), matching.end());
       }
     }
