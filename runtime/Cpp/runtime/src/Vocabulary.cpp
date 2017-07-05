@@ -11,6 +11,9 @@ using namespace antlr4::dfa;
 
 const Vocabulary Vocabulary::EMPTY_VOCABULARY;
 
+Vocabulary::Vocabulary() : _literalNames(), _symbolicNames(), _displayNames() {
+}
+
 Vocabulary::Vocabulary(const std::vector<std::string> &literalNames, const std::vector<std::string> &symbolicNames)
 : Vocabulary(literalNames, symbolicNames, {}) {
 }
@@ -20,9 +23,6 @@ Vocabulary::Vocabulary(const std::vector<std::string> &literalNames,
   : _literalNames(literalNames), _symbolicNames(symbolicNames), _displayNames(displayNames),
     _maxTokenType(std::max(_displayNames.size(), std::max(_literalNames.size(), _symbolicNames.size())) - 1) {
   // See note here on -1 part: https://github.com/antlr/antlr4/pull/1146
-}
-
-Vocabulary::~Vocabulary() {
 }
 
 Vocabulary Vocabulary::fromTokenNames(const std::vector<std::string> &tokenNames) {
