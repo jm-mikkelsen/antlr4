@@ -232,13 +232,13 @@ RuleTagToken* ParseTreePatternMatcher::getRuleTagToken(ParseTree *t) {
 
 std::vector<std::unique_ptr<Token>> ParseTreePatternMatcher::tokenize(const std::string &pattern) {
   // split pattern into chunks: sea (raw input) and islands (<ID>, <expr>)
-  std::vector<Chunk> chunks = split(pattern);
+  std::vector<std::unique_ptr<Chunk>> chunks = split(pattern);
 
   // create token stream from text and tags
   std::vector<std::unique_ptr<Token>> tokens;
-  for (auto chunk : chunks) {
-    if (is<TagChunk *>(&chunk)) {
-      TagChunk &tagChunk = (TagChunk&)chunk;
+  for (auto const& chunk : chunks) {
+    if (is<TagChunk *>(chunk.get())) {
+      TagChunk& tagChunk = dynamic_cast<TagChunk&>(*chunk.get());
       // add special rule token or conjure up new token from name
       if (isupper(tagChunk.getTag()[0])) {
         size_t ttype = _parser->getTokenType(tagChunk.getTag());
@@ -257,7 +257,7 @@ std::vector<std::unique_ptr<Token>> ParseTreePatternMatcher::tokenize(const std:
         throw IllegalArgumentException("invalid tag: " + tagChunk.getTag() + " in pattern: " + pattern);
       }
     } else {
-      TextChunk &textChunk = (TextChunk&)chunk;
+      TextChunk &textChunk = dynamic_cast<TextChunk&>(*chunk.get());
       ANTLRInputStream input(textChunk.getText());
       _lexer->setInputStream(&input);
       std::unique_ptr<Token> t(_lexer->nextToken());
@@ -272,10 +272,10 @@ std::vector<std::unique_ptr<Token>> ParseTreePatternMatcher::tokenize(const std:
   return tokens;
 }
 
-std::vector<Chunk> ParseTreePatternMatcher::split(const std::string &pattern) {
+std::vector<std::unique_ptr<Chunk>> ParseTreePatternMatcher::split(const std::string &pattern) {
   size_t p = 0;
   size_t n = pattern.length();
-  std::vector<Chunk> chunks;
+  std::vector<std::unique_ptr<Chunk>> chunks;
 
   // find all start and stop indexes first, then collect
   std::vector<size_t> starts;
@@ -314,12 +314,12 @@ std::vector<Chunk> ParseTreePatternMatcher::split(const std::string &pattern) {
   // collect into chunks now
   if (ntags == 0) {
     std::string text = pattern.substr(0, n);
-    chunks.push_back(TextChunk(text));
+    chunks.emplace_back(new TextChunk(std::move(text)));
   }
 
   if (ntags > 0 && starts[0] > 0) { // copy text up to first tag into chunks
     std::string text = pattern.substr(0, starts[0]);
-    chunks.push_back(TextChunk(text));
+    chunks.emplace_back(new TextChunk(std::move(text)));
   }
 
   for (size_t i = 0; i < ntags; i++) {
@@ -332,11 +332,11 @@ std::vector<Chunk> ParseTreePatternMatcher::split(const std::string &pattern) {
       label = tag.substr(0,colon);
       ruleOrToken = tag.substr(colon + 1, tag.length() - (colon + 1));
     }
-    chunks.push_back(TagChunk(label, ruleOrToken));
+    chunks.emplace_back(new TagChunk(std::move(label), std::move(ruleOrToken)));
     if (i + 1 < ntags) {
       // copy from end of <tag> to start of next
       std::string text = pattern.substr(stops[i] + _stop.length(), starts[i + 1] - (stops[i] + _stop.length()));
-      chunks.push_back(TextChunk(text));
+      chunks.emplace_back(new TextChunk(std::move(text)));
     }
   }
 
@@ -344,20 +344,17 @@ std::vector<Chunk> ParseTreePatternMatcher::split(const std::string &pattern) {
     size_t afterLastTag = stops[ntags - 1] + _stop.length();
     if (afterLastTag < n) { // copy text from end of last tag to end
       std::string text = pattern.substr(afterLastTag, n - afterLastTag);
-      chunks.push_back(TextChunk(text));
+      chunks.emplace_back(new TextChunk(std::move(text)));
     }
   }
 
   // strip out all backslashes from text chunks but not tags
   for (size_t i = 0; i < chunks.size(); i++) {
-    Chunk &c = chunks[i];
-    if (is<TextChunk *>(&c)) {
-      TextChunk &tc = (TextChunk&)c;
-      std::string unescaped = tc.getText();
+    TextChunk* tc = dynamic_cast<TextChunk*>(chunks[i].get());
+    if (tc && tc->getText().find_first_of('\\') != std::string::npos) {
+      std::string unescaped = tc->getText();
       unescaped.erase(std::remove(unescaped.begin(), unescaped.end(), '\\'), unescaped.end());
-      if (unescaped.length() < tc.getText().length()) {
-        chunks[i] = TextChunk(unescaped);
-      }
+      chunks[i] = std::unique_ptr<TextChunk>(new TextChunk(std::move(unescaped)));
     }
   }
 

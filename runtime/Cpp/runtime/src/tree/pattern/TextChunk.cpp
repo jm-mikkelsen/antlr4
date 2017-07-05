@@ -9,7 +9,14 @@
 
 using namespace antlr4::tree::pattern;
 
-TextChunk::TextChunk(const std::string &text) : text(text) {
+TextChunk::TextChunk(const std::string &text_) : text(text_) {
+  if (text == "") {
+    throw IllegalArgumentException("text cannot be nul");
+  }
+
+}
+
+TextChunk::TextChunk(std::string&& text_) : text(std::move(text_)) {
   if (text == "") {
     throw IllegalArgumentException("text cannot be nul");
   }
@@ -19,7 +26,7 @@ TextChunk::TextChunk(const std::string &text) : text(text) {
 TextChunk::~TextChunk() {
 }
 
-std::string TextChunk::getText() {
+std::string const& TextChunk::getText() const {
   return text;
 }
 

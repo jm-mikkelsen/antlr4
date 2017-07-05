@@ -28,14 +28,15 @@ namespace pattern {
     /// <param name="text"> The text of this chunk. </param>
     /// <exception cref="IllegalArgumentException"> if {@code text} is {@code null}. </exception>
   public:
-    TextChunk(const std::string &text);
+    explicit TextChunk(const std::string &text);
+    explicit TextChunk(std::string&& text);
     virtual ~TextChunk();
 
     /// <summary>
     /// Gets the raw text of this chunk.
     /// </summary>
     /// <returns> The text of the chunk. </returns>
-    std::string getText();
+    std::string const& getText() const;
 
     /// <summary>
     /// {@inheritDoc}

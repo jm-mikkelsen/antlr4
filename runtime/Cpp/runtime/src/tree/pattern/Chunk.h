@@ -25,18 +25,15 @@ namespace pattern {
   class ANTLR4CPP_PUBLIC Chunk {
   public:
     Chunk() = default;
-    Chunk(Chunk const&) = default;
+    Chunk(Chunk const&) = delete;
     virtual ~Chunk();
 
-    Chunk& operator=(Chunk const&) = default;
+    Chunk& operator=(Chunk const&) = delete;
 
     /// This method returns a text representation of the tag chunk. Labeled tags
     /// are returned in the form {@code label:tag}, and unlabeled tags are
     /// returned as just the tag name.
-    virtual std::string toString() {
-      std::string str;
-      return str;
-    }
+    virtual std::string toString() = 0;
   };
 
 } // namespace pattern
