@@ -18,19 +18,8 @@ ATNDeserializationOptions::ATNDeserializationOptions(ATNDeserializationOptions *
   this->generateRuleBypassTransitions = options->generateRuleBypassTransitions;
 }
 
-ATNDeserializationOptions::~ATNDeserializationOptions() {
-}
-
 const ATNDeserializationOptions& ATNDeserializationOptions::getDefaultOptions() {
   return defaultOptions;
-}
-
-bool ATNDeserializationOptions::isReadOnly() {
-  return readOnly;
-}
-
-void ATNDeserializationOptions::makeReadOnly() {
-  readOnly = true;
 }
 
 bool ATNDeserializationOptions::isVerifyATN() {
@@ -38,7 +27,6 @@ bool ATNDeserializationOptions::isVerifyATN() {
 }
 
 void ATNDeserializationOptions::setVerifyATN(bool verify) {
-  throwIfReadOnly();
   verifyATN = verify;
 }
 
@@ -47,18 +35,10 @@ bool ATNDeserializationOptions::isGenerateRuleBypassTransitions() {
 }
 
 void ATNDeserializationOptions::setGenerateRuleBypassTransitions(bool generate) {
-  throwIfReadOnly();
   generateRuleBypassTransitions = generate;
 }
 
-void ATNDeserializationOptions::throwIfReadOnly() {
-  if (isReadOnly()) {
-    throw "The object is read only.";
-  }
-}
-
 void ATNDeserializationOptions::InitializeInstanceFields() {
-  readOnly = false;
   verifyATN = true;
   generateRuleBypassTransitions = false;
 }

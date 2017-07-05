@@ -10,26 +10,18 @@
 namespace antlr4 {
 namespace atn {
 
-  class ANTLR4CPP_PUBLIC ATNDeserializationOptions {
+  class ANTLR4CPP_PUBLIC ATNDeserializationOptions final {
   private:
     static ATNDeserializationOptions defaultOptions;
 
-    bool readOnly;
     bool verifyATN;
     bool generateRuleBypassTransitions;
 
   public:
     ATNDeserializationOptions();
-    ATNDeserializationOptions(ATNDeserializationOptions *options);
-    ATNDeserializationOptions(ATNDeserializationOptions const&) = default;
-    virtual ~ATNDeserializationOptions();
-    ATNDeserializationOptions& operator=(ATNDeserializationOptions const&) = default;
+    explicit ATNDeserializationOptions(ATNDeserializationOptions *options);
 
     static const ATNDeserializationOptions& getDefaultOptions();
-
-    bool isReadOnly();
-
-    void makeReadOnly();
 
     bool isVerifyATN();
 
@@ -38,9 +30,6 @@ namespace atn {
     bool isGenerateRuleBypassTransitions();
 
     void setGenerateRuleBypassTransitions(bool generate);
-
-  protected:
-    virtual void throwIfReadOnly();
 
   private:
     void InitializeInstanceFields();
