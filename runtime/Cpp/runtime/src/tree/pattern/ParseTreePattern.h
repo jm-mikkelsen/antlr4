@@ -15,7 +15,7 @@ namespace pattern {
   /// A pattern like {@code <ID> = <expr>;} converted to a <seealso cref="ParseTree"/> by
   /// <seealso cref="ParseTreePatternMatcher#compile(String, int)"/>.
   /// </summary>
-  class ANTLR4CPP_PUBLIC ParseTreePattern {
+  class ANTLR4CPP_PUBLIC ParseTreePattern final {
   public:
     /// <summary>
     /// Construct a new instance of the <seealso cref="ParseTreePattern"/> class.
@@ -29,7 +29,7 @@ namespace pattern {
     ParseTreePattern(ParseTreePatternMatcher *matcher, const std::string &pattern, int patternRuleIndex,
                      ParseTree *patternTree);
     ParseTreePattern(ParseTreePattern const&) = default;
-    virtual ~ParseTreePattern();
+    ~ParseTreePattern() = default;
     ParseTreePattern& operator=(ParseTreePattern const&) = default;
 
     /// <summary>
@@ -39,7 +39,7 @@ namespace pattern {
     /// <returns> A <seealso cref="ParseTreeMatch"/> object describing the result of the
     /// match operation. The <seealso cref="ParseTreeMatch#succeeded()"/> method can be
     /// used to determine whether or not the match was successful. </returns>
-    virtual ParseTreeMatch match(ParseTree *tree);
+    ParseTreeMatch match(ParseTree *tree);
 
     /// <summary>
     /// Determine whether or not a parse tree matches this tree pattern.
@@ -47,7 +47,7 @@ namespace pattern {
     /// <param name="tree"> The parse tree to match against this tree pattern. </param>
     /// <returns> {@code true} if {@code tree} is a match for the current tree
     /// pattern; otherwise, {@code false}. </returns>
-    virtual bool matches(ParseTree *tree);
+    bool matches(ParseTree *tree);
 
     /// Find all nodes using XPath and then try to match those subtrees against
     /// this tree pattern.
@@ -57,20 +57,20 @@ namespace pattern {
     /// @returns A collection of ParseTreeMatch objects describing the
     /// successful matches. Unsuccessful matches are omitted from the result,
     /// regardless of the reason for the failure.
-    virtual std::vector<ParseTreeMatch> findAll(ParseTree *tree, const std::string &xpath);
+    std::vector<ParseTreeMatch> findAll(ParseTree *tree, const std::string &xpath);
 
     /// <summary>
     /// Get the <seealso cref="ParseTreePatternMatcher"/> which created this tree pattern.
     /// </summary>
     /// <returns> The <seealso cref="ParseTreePatternMatcher"/> which created this tree
     /// pattern. </returns>
-    virtual ParseTreePatternMatcher *getMatcher() const;
+    ParseTreePatternMatcher *getMatcher() const;
 
     /// <summary>
     /// Get the tree pattern in concrete syntax form.
     /// </summary>
     /// <returns> The tree pattern in concrete syntax form. </returns>
-    virtual std::string getPattern() const;
+    std::string getPattern() const;
 
     /// <summary>
     /// Get the parser rule which serves as the outermost rule for the tree
@@ -78,7 +78,7 @@ namespace pattern {
     /// </summary>
     /// <returns> The parser rule which serves as the outermost rule for the tree
     /// pattern. </returns>
-    virtual int getPatternRuleIndex() const;
+    int getPatternRuleIndex() const;
 
     /// <summary>
     /// Get the tree pattern as a <seealso cref="ParseTree"/>. The rule and token tags from
@@ -86,7 +86,7 @@ namespace pattern {
     /// of type <seealso cref="RuleTagToken"/> or <seealso cref="TokenTagToken"/>.
     /// </summary>
     /// <returns> The tree pattern as a <seealso cref="ParseTree"/>. </returns>
-    virtual ParseTree* getPatternTree() const;
+    ParseTree* getPatternTree() const;
 
   private:
     const int patternRuleIndex;

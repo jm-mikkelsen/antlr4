@@ -12,7 +12,7 @@ namespace tree {
 namespace pattern {
 
   /// Represents the result of matching a ParseTree against a tree pattern.
-  class ANTLR4CPP_PUBLIC ParseTreeMatch {
+  class ANTLR4CPP_PUBLIC ParseTreeMatch final {
   private:
     /// This is the backing field for getTree().
     ParseTree *_tree;
@@ -44,7 +44,7 @@ namespace pattern {
     ParseTreeMatch(ParseTree *tree, ParseTreePattern const& pattern,
                    const std::map<std::string, std::vector<ParseTree *>> &labels, ParseTree *mismatchedNode);
     ParseTreeMatch(ParseTreeMatch const&) = default;
-    virtual ~ParseTreeMatch();
+    ~ParseTreeMatch() = default;
     ParseTreeMatch& operator=(ParseTreeMatch const&) = default;
 
     /// <summary>
@@ -62,7 +62,7 @@ namespace pattern {
     /// </param>
     /// <returns> The last <seealso cref="ParseTree"/> to match a tag with the specified
     /// label, or {@code null} if no parse tree matched a tag with the label. </returns>
-    virtual ParseTree* get(const std::string &label);
+    ParseTree* get(const std::string &label);
 
     /// <summary>
     /// Return all nodes matching a rule or token tag with the specified label.
@@ -86,7 +86,7 @@ namespace pattern {
     /// <returns> A collection of all <seealso cref="ParseTree"/> nodes matching tags with
     /// the specified {@code label}. If no nodes matched the label, an empty list
     /// is returned. </returns>
-    virtual std::vector<ParseTree *> getAll(const std::string &label);
+    std::vector<ParseTree *> getAll(const std::string &label);
 
     /// <summary>
     /// Return a mapping from label &rarr; [list of nodes].
@@ -97,35 +97,35 @@ namespace pattern {
     /// </summary>
     /// <returns> A mapping from labels to parse tree nodes. If the parse tree
     /// pattern did not contain any rule or token tags, this map will be empty. </returns>
-    virtual std::map<std::string, std::vector<ParseTree *>>& getLabels();
+    std::map<std::string, std::vector<ParseTree *>>& getLabels();
 
     /// <summary>
     /// Get the node at which we first detected a mismatch.
     /// </summary>
     /// <returns> the node at which we first detected a mismatch, or {@code null}
     /// if the match was successful. </returns>
-    virtual ParseTree* getMismatchedNode();
+    ParseTree* getMismatchedNode();
 
     /// <summary>
     /// Gets a value indicating whether the match operation succeeded.
     /// </summary>
     /// <returns> {@code true} if the match operation succeeded; otherwise,
     /// {@code false}. </returns>
-    virtual bool succeeded();
+    bool succeeded();
 
     /// <summary>
     /// Get the tree pattern we are matching against.
     /// </summary>
     /// <returns> The tree pattern we are matching against. </returns>
-    virtual const ParseTreePattern& getPattern();
+    const ParseTreePattern& getPattern();
 
     /// <summary>
     /// Get the parse tree we are trying to match to a pattern.
     /// </summary>
     /// <returns> The <seealso cref="ParseTree"/> we are trying to match to a pattern. </returns>
-    virtual ParseTree* getTree();
+    ParseTree* getTree();
 
-    virtual std::string toString();
+    std::string toString();
   };
 
 } // namespace pattern
