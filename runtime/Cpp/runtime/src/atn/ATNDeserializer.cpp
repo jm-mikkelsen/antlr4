@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -752,6 +752,7 @@ Ref<LexerAction> ATNDeserializer::lexerActionFactory(LexerActionType type, int d
       return std::make_shared<LexerTypeAction>(data1);
 
     default:
-      throw IllegalArgumentException("The specified lexer action type " + std::to_string((size_t)type) + " is not valid.");
+      throw IllegalArgumentException("The specified lexer action type " + std::to_string(static_cast<size_t>(type)) +
+                                     " is not valid.");
   }
 }

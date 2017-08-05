@@ -1,4 +1,4 @@
-﻿/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
+/* Copyright (c) 2012-2017 The ANTLR Project. All rights reserved.
  * Use of this file is governed by the BSD 3-clause license that
  * can be found in the LICENSE.txt file in the project root.
  */
@@ -11,7 +11,7 @@ namespace antlr4 {
 
   class ANTLR4CPP_PUBLIC Recognizer {
   public:
-    static const size_t EOF = std::numeric_limits<size_t>::max();
+    static const size_t EOF = static_cast<size_t>(-1); // std::numeric_limits<size_t>::max(); doesn't work in VS 2013.
 
     Recognizer();
     Recognizer(Recognizer const&) = delete;
